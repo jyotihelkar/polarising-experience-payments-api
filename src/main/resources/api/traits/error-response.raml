@@ -1,0 +1,43 @@
+#%RAML 1.0 Trait
+
+responses:
+  400:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/bad-request-400-error.json
+  404:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/not-found-404-error.json
+  405:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/method-not-allowed-405-error.json
+  406:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/not-acceptable-406-error.json
+  429:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/too-many-requests-429-error.json
+  500:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/any-500-error.json
+  501:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/not-implemented-501-error.json
+  502:
+    body:
+      application/json:
+        type: !include ../types/error-response-type.raml
+        example: !include ../examples/errors/bad-gateway-502-error.json

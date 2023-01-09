@@ -1,0 +1,20 @@
+#%RAML 1.0 DataType
+ 
+type: object
+properties:
+  message:
+    type: string
+    description: error message
+    required: true
+  description:
+    type: string
+    description: error description
+    required: true
+  dateTime:
+    type: datetime-only
+    description: datetime when error occured i.e. current datetime 
+    required: true
+  correlationId:
+    type: string
+    displayName: unique id
+    required: true

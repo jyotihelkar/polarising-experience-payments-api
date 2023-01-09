@@ -1,0 +1,13 @@
+#%RAML 1.0 Trait
+usage: This trait is for query parameters for fetching the payments data
+
+queryParameters:
+  startDate:
+    type: datetime
+    description: start date value
+    required: true
+    default: 1970-01-01T00:00:00.000Z
+  endDate:
+    type: datetime
+    description: end date value
+    required: true

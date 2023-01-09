@@ -1,0 +1,36 @@
+#%RAML 1.0
+title: polarising-experience-payments-api
+version: v1
+baseUri: http://polarising-experience-payments-api.us-e2.cloudhub.io
+protocols: [HTTP]
+description: This is the Experience API to get the payments information
+
+traits:
+  errorResponse : !include traits/error-response.raml
+  clientIdRequired: !include traits/client-id-security-header.raml
+  paymentsQueryParams : !include traits/payments-query-params.raml
+
+types:
+  healthCheck : !include types/health-check.raml
+  payments : !include types/get-payments.raml
+
+/health:
+  get:
+    description: Health Check API Endpoint
+    is: ['errorResponse']
+    responses:
+      200:
+        body:
+          application/json:
+            type: healthCheck
+            example: !include examples/health-check.json
+/payments:
+  get:
+    description: API Endpoint to fetch the payments data
+    is: ['clientIdRequired', 'errorResponse', 'paymentsQueryParams']
+    responses:
+      200:
+        body:
+          application/json:
+            type: payments
+            example: !include examples/get-payments.json

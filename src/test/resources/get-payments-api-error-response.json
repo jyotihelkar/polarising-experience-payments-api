@@ -1,0 +1,6 @@
+{
+    "message": "Bad request",
+    "description": "Required query parameter startDate not specified",
+    "dateTime": "2023-01-04T08:12:00",
+    "correlationId": "83b39e83-305a-49b7-b5be-a8746571632c"
+}

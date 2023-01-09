@@ -1,0 +1,6 @@
+{
+  "message": "Bad Gateway",
+  "description": "HTTP GET on resource 'http://stable-sys-xeh0ds.5sc6y6-2.usa-e2.cloudhub.io:80/sys-pedidos' failed: bad gateway (502).",
+  "dateTime": "2022-12-20T16:11:55",
+  "correlationId": "b746d3f5-58bb-41bb-959b-3438a25e42c1"
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="common-entry-sub-flow" doc:id="8df9f710-71a3-4d93-bd56-639d0a8422fa" >
+		<choice doc:name="uri-params-choice" doc:id="bfd78a0a-1c78-4281-96e1-d6841730a94c">
+			<when expression="#[message.attributes.uriParams[0] != null]">
+				<set-variable value="#[message.attributes.uriParams]" doc:name="inbound-uri-params-var" doc:id="f406502e-a269-4997-a0ba-1f34aff95d46" variableName="uriParams"/>
+			</when>
+		</choice>
+		<choice doc:name="query-params-choice" doc:id="b1ddd0ff-e029-4280-a4a9-448bc22fc3d8" >
+			<when expression="#[message.attributes.queryParams[0] != null]" >
+				<set-variable value="#[message.attributes.queryParams]" doc:name="inbound-query-params-var" doc:id="1c3ea80a-953c-4e1e-9054-26969eccc49e" variableName="queryParams" />
+			</when>
+		</choice>
+	</sub-flow>
+	<sub-flow name="common-error-response-sub-flow" doc:id="7fd6c00d-843f-4cad-86aa-0576c2618714" >
+		<logger level="ERROR" doc:name="error-logger" doc:id="5b9dfa65-795d-4cfd-9348-4eb69aa037d0" category="${logger.external.call.category}.${logger.external.call.category.error.suffix}" message="#[${file::dwl/error-logger.dwl}]"/>
+		<ee:transform doc:name="error-response" doc:id="860ca861-78cb-41f3-bd68-1b061c08e449" >
+			<ee:message >
+				<ee:set-payload resource="dwl/error-response.dwl" />
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

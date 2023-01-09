@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <sub-flow name="get-payments-sub-flow" doc:id="d611ba99-e67f-456f-baf7-c6c81ae13800" >
+		<logger level="DEBUG" doc:name="start-logger" doc:id="7bc834d7-3bd7-4dfc-9ce4-851b6f14f3cf" message='#["Get Payments Request Sub Flow Start"]'/>
+		<http:request method="GET" doc:name="get-payments-request" doc:id="53b2625f-ba4e-45df-956d-a0b2aedc47f8" config-ref="http-request-config" path="${process.payments.api.path}">
+			<http:query-params><![CDATA[#[${file::dwl/http-requester-query-params.dwl}]]]></http:query-params>
+			<http:response-validator>
+				<http:success-status-code-validator values="200..504" />
+			</http:response-validator>
+		</http:request>
+		<choice doc:name="Choice" doc:id="1f12625d-403a-483c-afa8-d4e582b2fcec">
+			<when expression="#[attributes.statusCode == 200]">
+				<ee:transform doc:name="payments-response">
+            <ee:message>
+				<ee:set-payload resource="dwl/payments-response.dwl" />
+            </ee:message>
+        </ee:transform>
+			</when>
+			<otherwise>
+				<flow-ref doc:name="common-error-response-sub-flow" doc:id="cd658f60-7f8a-4a6f-87d8-d48edbebdbfd" name="common-error-response-sub-flow" />
+			</otherwise>
+		</choice>
+		<logger level="DEBUG" doc:name="end-logger" doc:id="f74460d9-4497-458e-9d3e-6ddabe1b4fc0" message='#["Get Payments Request Sub Flow End"]' />
+	</sub-flow>
+	<flow name="get:\health:polarising-experience-payments-api-config">
+        <ee:transform doc:name="health-check">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: "UP"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\payments:polarising-experience-payments-api-config" doc:id="a4a6b421-2c8a-4334-866c-c1c0d3d40e37">
+        <flow-ref doc:name="common-entry-sub-flow" doc:id="df157930-5573-4eee-b292-d36f9b29484d" name="common-entry-sub-flow"/>
+		<flow-ref doc:name="get-payments-sub-flow" doc:id="7535d2ba-d7c2-49a3-aeaf-fd0c8ee7c635" name="get-payments-sub-flow" />
+    </flow>
+</mule>

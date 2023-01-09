@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="mule-error-handler-experience-api-test-suite.xml" />
+	<munit:test name="munit-bad-request-400-test"
+		doc:id="94ba572d-5f92-4dbd-b83a-892737ea9826" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="f19c083d-bbdb-463e-94b7-194e13eb2361"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['APIKIT:BAD_REQUEST']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="1e82aaea-caa9-48ff-bf96-f5177a6fb81c">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="f3b0206d-bc97-4f3f-988b-4ae6e65c41ba"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="86ea93bb-6dca-48bf-8db0-eff1cbef9d3f" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[400]' doc:name="statusCode-var" doc:id="f0098cbc-16c6-4d9b-9461-ee9c1de641e0" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="1786a296-3609-4705-a0a4-08228762199c" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="munit-not-found-404-test"
+		doc:id="d34add17-356f-4e59-849b-e2986670f129" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="a9bf8a0b-f0ff-4ab9-8d6a-bad0667d6016"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['APIKIT:NOT_FOUND']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="64168a31-0640-46ed-95e0-7deb92f88678">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="f5caea26-01d2-468b-a4c4-386380e863d6"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="4367a4b4-05bc-42c4-b3f3-db533e00973b" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[404]' doc:name="statusCode-var" doc:id="6cdd6037-bc4c-4627-a365-c6773484be9c" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="647f01b0-15d0-4015-8d06-8c39d76db4f3" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-method-not-allowed-405-test"
+		doc:id="464d4806-7741-48d4-90bc-b40018f7ac96" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="49a05ee3-6acb-4762-94f4-8c103d287997"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['APIKIT:METHOD_NOT_ALLOWED']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="b14d600f-3fd0-4b71-a471-75e26962a916">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="4ff7ac63-dfa0-4836-ac78-328adcfb4aef"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="29493456-2ed0-4a0b-ac45-af27bd08293e" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[405]' doc:name="statusCode-var" doc:id="5e6729f4-9051-424d-b095-7415f112411f" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="035beb53-145f-45fc-9047-642ac85437ac" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-not-acceptable-406-test"
+		doc:id="07560591-3fce-4665-96cf-c320e3127cb9" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="f0b0e36b-ddb4-4109-a8f4-66de46e209e4"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['APIKIT:NOT_ACCEPTABLE']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="44d23776-48a3-4d4b-b9d0-9d8ba413fe0b">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="305556bd-593f-41ce-993b-e5ea244b74f2"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="319b362c-012c-4755-9bc3-72a49dff7f9d" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[406]' doc:name="statusCode-var" doc:id="e157ac45-c3e1-4913-9eab-301dde371035" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="34714ffc-1b3d-4c0b-90fc-5cecfde81080" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-bad-gateway-502-test"
+		doc:id="1bd36d47-d4f5-4d69-9b77-0023c06137f9" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="75a82f74-3338-4fe5-9fc3-40b203993e8f"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['HTTP:BAD_GATEWAY']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="dd128693-9e7b-4441-9a28-5bf7faa3c3b9">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="fc616543-3329-46a8-ac31-58046541fdb9"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="7be3b8a7-9573-4907-97d5-ca251d216a53" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[502]' doc:name="statusCode-var" doc:id="c12a9db5-07fd-4ab8-a560-cff6b08ea4e7" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="cc5c9ca1-e801-4dae-aaa0-2f432d64508d" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-not-implemented-501-test"
+		doc:id="7093c72b-d5cb-4610-a362-c31a3fcedc38" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="dc1ec06f-b9d3-4913-98ac-5329899aca6a"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['APIKIT:NOT_IMPLEMENTED']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="6e7109e5-ecc7-45dc-9e83-dd948ebfb63b">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="3a51019b-d936-4375-972c-e22b79cb616d"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="c9df79c7-6278-45f2-8f70-699b43f1715e" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[501]' doc:name="statusCode-var" doc:id="c8dc7211-f1bf-485c-ab56-da99f32cd245" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="00ac49d7-acf7-49b6-857b-e37497ebff6a" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-any-500-test"
+		doc:id="57924296-b999-4eda-a1cb-d0215e2a4db0" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock APIKIT Router"
+				doc:id="8b757549-dcd6-48df-ba00-23594a71ec0f"
+				processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="polarising-experience-payments-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error
+						typeId="#['ANY']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="dce8877a-2d80-455c-9015-922a4613ce5b">
+				<flow-ref doc:name="flow reference main flow"
+					doc:id="95cf8b00-049d-4130-886c-eeba2a93b386"
+					name="polarising-experience-payments-api-main" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="c2399876-1a77-44a1-bcd1-d649cab66eac" />
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<set-variable value='#[500]' doc:name="statusCode-var" doc:id="fb3b7392-9394-4b79-afad-c6b8f991ba5b" variableName="statusCode"/>
+			<munit-tools:assert-equals doc:name="assert-status-code" doc:id="84d67e0b-a19e-4e1c-8811-e8fdf2d2ba9d" actual="#[vars.httpStatus]" expected="#[vars.statusCode]"/>
+		</munit:validation>
+		
+	</munit:test>
+
+
+</mule>

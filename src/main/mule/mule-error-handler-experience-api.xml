@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="global-error-handler"
+		doc:id="508a3459-9e04-4c1b-8ae2-abca3a0698c8">
+		<on-error-propagate
+			type="APIKIT:BAD_REQUEST, HTTP:BAD_REQUEST">
+			<set-variable value="#[400]" doc:name="HTTP status"
+				doc:id="ac3c66cb-5535-42f0-a88b-18ce05bcf768"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="4dc52dc0-d9a8-4959-a09c-498ccfd81dbb"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:NOT_FOUND, HTTP:NOT_FOUND">
+			<set-variable value="#[404]" doc:name="HTTP status"
+				doc:id="e19776c2-1807-4dbf-a428-85283d4c718d"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="457cff56-99dd-42fc-bd95-20257fc57b60"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:METHOD_NOT_ALLOWED, HTTP:METHOD_NOT_ALLOWED">
+			<set-variable value="#[405]" doc:name="HTTP status"
+				doc:id="7ceec1ab-844f-40d5-82f1-86298688fd4b"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="c737bd83-74b3-44ae-8aeb-50cf92b435f5"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:NOT_ACCEPTABLE, HTTP:NOT_ACCEPTABLE">
+			<set-variable value="#[406]" doc:name="HTTP status"
+				doc:id="8259b97e-75a1-4f53-b249-e4d3e0a66595"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="3a86bd97-c000-4cea-9fc6-83047966c447"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+			<set-variable value="#[501]" doc:name="HTTP status"
+				doc:id="db328441-f27a-4fcf-a634-358a56e4b36b"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="06ce0e65-0565-4031-bbea-1e2fd9bff103"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="HTTP:BAD_GATEWAY"
+			enableNotifications="true" logException="true">
+			<set-variable value="#[502]" doc:name="HTTP status"
+				doc:id="a9fff786-104b-4101-bd47-5bdcbee16dbb"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="9e7e9120-da49-414c-932a-a12602525de1"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="354767be-5d28-44ff-96cd-7e67b410dec8" type="ANY">
+			<set-variable value="#[500]" doc:name="HTTP status"
+				doc:id="1c60de9a-2064-4946-bce9-c2e5294fe1df"
+				variableName="httpStatus" />
+			<flow-ref doc:name="exception-handler-sub-flow"
+				doc:id="9207c01c-d6c1-46a4-892d-745fdbffd6bc"
+				name="exception-handler-sub-flow" />
+		</on-error-propagate>		
+	</error-handler>
+	<sub-flow name="exception-handler-sub-flow"
+		doc:id="30549d89-0807-41c8-a09c-595058a3491b">
+		<flow-ref doc:name="common-error-response-sub-flow"
+			doc:id="7b8be452-6358-4eef-8400-29aa55cfc632"
+			name="common-error-response-sub-flow" />
+	</sub-flow>
+</mule>

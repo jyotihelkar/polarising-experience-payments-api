@@ -1,0 +1,9 @@
+{
+  "payments":[
+    {
+      "requests": ["p1", "p2", "p3"],
+      "validations": "no errors",
+      "totalAmountAuthorized": "1499.99€"
+    }
+  ]
+}

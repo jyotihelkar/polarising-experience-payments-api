@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config
+		name="get-payments-api-http-listener-config" doc:description="HTTP Listener Configuration">
+		<http:listener-connection host="${api.listener.host}"
+			port="${api.listener.port}">
+		</http:listener-connection>
+	</http:listener-config>
+	<http:request-config name="http-request-config" doc:name="HTTP Request configuration" doc:id="c0b5ebbd-dc42-4b8d-9bd2-d29358235662" doc:description="HTTP Requester Configuration&#10;" responseTimeout="${process.payments.api.connection.timeout}">
+		<http:request-connection host="${process.payments.api.host}" port="${process.payments.api.port}" connectionIdleTimeout="${process.payments.api.connection.timeout}" protocol="${process.payments.api.protocol}"/>
+		<http:default-headers >
+			<http:default-header key="client_id" value="${secure::process.payments.api.client.id}" />
+			<http:default-header key="client_secret" value="${secure::process.payments.api.client.secret}" />
+		</http:default-headers>
+	
+</http:request-config>
+	<apikit:config name="polarising-experience-payments-api-config" api="polarising-experience-payments-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<configuration-properties doc:name="Configuration properties" doc:id="5354916f-a55c-47c4-a32f-1f67427618f9" file="common.properties" doc:description="Common properties"/>
+	<api-gateway:autodiscovery apiId="${polarising.experience.payments.api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="990bbef6-8936-4014-a510-f562967a3c45" doc:description="Api id" flowRef="polarising-experience-payments-api-main" />
+	<configuration doc:name="Configuration" doc:id="b4b5daf7-1a1b-4fc3-9638-1700096f5dce" doc:description="configuration" defaultErrorHandler-ref="global-error-handler" />
+	<secure-properties:config name="secure-properties-config" doc:name="Secure Properties Config" doc:id="6b2b4c5a-437b-4a2c-b736-698b2d8a6a13" file="common.properties" key="${secure.properties.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+</mule>

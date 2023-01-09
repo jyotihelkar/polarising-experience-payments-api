@@ -1,0 +1,18 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  requests:
+    type: array
+    items:
+      type: string
+    description: Requests value
+    required: true
+  validations:
+    type: string
+    description: Validations for errors
+    required: true
+  totalAmountAuthorized:
+    type: string
+    description: Authorized Total Amount in Euros
+    required: true

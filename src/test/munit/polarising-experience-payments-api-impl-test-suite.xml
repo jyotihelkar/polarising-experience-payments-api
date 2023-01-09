@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="polarising-experience-payments-api-impl-test-suite.xml" />
+	<munit:test name="health-check-test" doc:id="aecdc746-edb4-49bc-8a92-e420f3588629" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="health-check-flow-ref" doc:id="f83c61a0-887b-4415-9604-32b1aeae05d6" name="get:\health:polarising-experience-payments-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="3a9c0cef-f365-46d0-a06d-82164cb74912" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="experience-get-payments-success-test" doc:id="c645a46c-2f8d-447f-92cf-b430dd578477" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a2f79c37-4f18-43f4-96e2-42cdceaa9220" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="get-payments-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="53b2625f-ba4e-45df-956d-a0b2aedc47f8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('get-payments-api-response.json')]" mediaType="application/json" />
+					<munit-tools:attributes value="#[{'statusCode':200}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="579339af-50f2-45f9-9160-d7b09ec94c59">
+				<munit:attributes value="#[{ method : 'GET', headers : { client_id : 'xxx', client_secret: 'xxx'}, queryParams : {'dataFim' : '2200-01-01T00:00:00.000Z' , 'dataInicio' : '1970-01-01T00:00:00.000Z'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="get-payments-flow-ref" doc:id="2b0482f2-5775-4a43-9fd7-22ec098f71a3" name="get:\payments:polarising-experience-payments-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="c03f8c9d-5e1c-492b-9687-af4434b67267" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="experience-get-payments-error-test" doc:id="e9602ec9-923b-46f4-a885-c3e9111969cc" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cdce0a8f-288a-40b5-8bd3-51f2630b6fa8" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="get-payments-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="53b2625f-ba4e-45df-956d-a0b2aedc47f8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('get-payments-api-error-response.json')]" mediaType="application/json" />
+					<munit-tools:attributes value="#[{'statusCode':400}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="a4a069b8-faa3-4177-8274-02ef0c4e3277">
+				<munit:attributes value="#[{ method : 'GET', headers : { client_id : 'xxx', client_secret: 'xxx'}, queryParams : {'dataInicio' : '1970-01-01T00:00:00.000Z'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="get-payments-flow-ref" doc:id="97ac5178-d8ae-415c-bb0d-fb1afc99a1b9" name="get:\payments:polarising-experience-payments-api-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a92a7f4b-60e6-490e-9d36-e75b9ab5f83f" is="#[MunitTools::equalTo(400)]" expression="#[attributes.statusCode]" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
